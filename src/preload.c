@@ -22,6 +22,7 @@ struct app_p0_shared_state {
   atomic_int slide_ready;
   atomic_int p0_ready;
   atomic_int writer_started;
+  atomic_int writer_landed;
   _Atomic uintptr_t offset;
   _Atomic uintptr_t gate_page_struct;
   _Atomic uintptr_t probe_page_struct;
@@ -58,6 +59,12 @@ void app_publish_p0_dirty(void) {
 void app_publish_writer_started(void) {
   if (app_p0_state) {
     atomic_store(&app_p0_state->writer_started, 1);
+  }
+}
+
+void app_publish_writer_landed(void) {
+  if (app_p0_state) {
+    atomic_store(&app_p0_state->writer_landed, 1);
   }
 }
 
@@ -234,8 +241,14 @@ __attribute__((constructor)) static void load(void) {
     }
 
 #if defined(APP_PAYLOAD) && defined(SLIDE_P0_OFFSET_CANDIDATES)
-    if (atomic_load(&app_p0_state->writer_started)) {
-      pr_error("stack writer ran; refusing retry on this boot\n");
+    if (atomic_load(&app_p0_state->writer_landed)) {
+      pr_error("stack write window opened; refusing retry on this boot\n");
+      break;
+    }
+    if (atomic_load(&app_p0_state->writer_started) &&
+        !(waited == child && WIFEXITED(status))) {
+      pr_error("stack writer ran but child ended abnormally; "
+               "refusing retry on this boot\n");
       break;
     }
 #endif

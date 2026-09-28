@@ -399,6 +399,7 @@ void app_publish_p0_offset(uintptr_t offset);
 void app_publish_slide_ready(void);
 void app_publish_p0_dirty(void);
 void app_publish_writer_started(void);
+void app_publish_writer_landed(void);
 int select_slide_payload_slot(uintptr_t offset);
 int select_slide_payload_index(size_t index);
 #if defined(APP_PHYS_P0_ORACLE) && APP_PHYS_P0_ORACLE

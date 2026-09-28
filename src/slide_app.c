@@ -2130,6 +2130,9 @@ static int slide_child_trigger_write(void) {
   int result = atomic_load(&slide_waiter_ok) != 0 &&
                atomic_load(&slide_stack_write_window) != 0;
 #endif
+  if (atomic_load(&slide_stack_write_window)) {
+    app_publish_writer_landed();
+  }
   atomic_store(&slide_route_stop, 1);
   SYSCHK(pthread_join(waiter, NULL));
   SYSCHK(pthread_join(owner, NULL));
