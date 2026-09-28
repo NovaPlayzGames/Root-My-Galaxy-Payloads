@@ -2124,11 +2124,11 @@ static int slide_child_trigger_write(void) {
 #if defined(APP_S928_STABLE_RACE) && APP_S928_STABLE_RACE
 #if defined(APP_S928_ROUTE_DIAG) && APP_S928_ROUTE_DIAG
   int waiter_ok = atomic_load(&slide_waiter_ok);
-  int write_window = atomic_load(&slide_pselect_write_window);
+  int write_window = atomic_load(&slide_stack_write_window);
   int result = waiter_ok != 0 && write_window != 0;
 #else
   int result = atomic_load(&slide_waiter_ok) != 0 &&
-               atomic_load(&slide_pselect_write_window) != 0;
+               atomic_load(&slide_stack_write_window) != 0;
 #endif
   atomic_store(&slide_route_stop, 1);
   SYSCHK(pthread_join(waiter, NULL));

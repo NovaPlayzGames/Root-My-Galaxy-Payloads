@@ -141,7 +141,7 @@
       "kernelVersions": ["6.1.145"],
       "exploit": {
         "url": "https://raw.githubusercontent.com/NovaPlayzGames/Root-My-Galaxy-Payloads/main/artifacts/e3q-S928USQS6DZH3/cve-2026-43499-app.so",
-        "size": 126432
+        "size": 104128
       },
       "kernelsu": {
         "url": "https://raw.githubusercontent.com/NovaPlayzGames/Root-My-Galaxy-Payloads/main/artifacts/e3q-S928USQS6DZH3/ksud-e3q-S928USQS6DZH3-kdp",
