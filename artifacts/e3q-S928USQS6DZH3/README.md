@@ -22,8 +22,19 @@ the DZH3 kernel analysis.
 
 ## KernelSU
 
-The matching KernelSU late-load binary is:
-`kernelsu/ksud-e3q-S928USQS6DZH3-kdp`
+The KernelSU late-load artifact in this directory (`ksud-e3q-S928USQS6DZH3-kdp`)
+is a self-contained loader, not an upstream `ksud` binary. It embeds the
+no-patch-text KernelSU module
+(`kernelsu/android14-6.1_kernelsu-e3q-S928BXXS6DZF2-kdp.ko`, vermagic patched to
+`abS928USQS6DZH3`) and loads it via kallsyms symbol pre-binding +
+`finit_module`, ignoring the helper's `late-load` argv.
+
+Rationale: the previous DZF2-renamed `ksud` embedded a live-text-patching
+module which panics under Samsung EL2/RKP on this target. The no-patch-text
+module loads cleanly and KernelSU 3.2.5 control verified on hardware
+(uid=2000 shell, `version=32525 flags=0x5`).
+
+Source: `../../repo/ksuload.c` (loader) — see commit history.
 
 ## Compatibility
 
